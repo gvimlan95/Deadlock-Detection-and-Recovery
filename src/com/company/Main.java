@@ -3,7 +3,6 @@ package com.company;
 import sun.jvm.hotspot.debugger.ThreadAccess;
 
 import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -36,8 +35,9 @@ public class Main {
         int safe = 0,count = 0,exec;
 
 
+        int tempMaxRes = sc.nextInt();;
         for(int i = 0;i<numResource;i++){
-            maxRes[i] = sc.nextInt();
+            maxRes[i] = tempMaxRes;
         }
 
         for(int i =0;i<numProcess;i++){
@@ -150,15 +150,11 @@ public class Main {
 
 
     public static void detectDeadlock() throws InterruptedException {
-        ThreadMXBean tmx = ManagementFactory.getThreadMXBean();
-        long[] ids = tmx.findDeadlockedThreads();
-        if (ids != null) {
-            ThreadInfo[] infos = tmx.getThreadInfo(ids, true, true);
-            System.out.println("The following threads are deadlocked:");
-            for (ThreadInfo ti : infos) {
-                System.out.println(ti);
-            }
-        }
+            ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
+            long[] threadIds = threadBean.findDeadlockedThreads();
+            int deadlockedThreads = threadIds != null? threadIds.length : 0;
+            System.out.println("Number of deadlocked threads: " + deadlockedThreads);
+            TimeUnit.MILLISECONDS.sleep(1000);
     }
 
     public static int[] ShuffleArray(int[] array)
